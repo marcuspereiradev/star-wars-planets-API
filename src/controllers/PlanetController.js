@@ -3,15 +3,22 @@ const StarWarsAPI = require('../services/StarWarsAPI');
 
 module.exports = {
   async index(request, response) {
-    await Planet.find({}, (err, planets) => {
-      const allPlanets = {};
+    const name = request.query.name;
 
-      planets.forEach(planet => {
-        allPlanets[planet._id] = planet;
-      });
+    if (name) {
+      const planetByName = await Planet.find({ name: new RegExp(name, 'i') });
+      return response.json(planetByName);
+    } else {
+      await Planet.find({}, (err, planets) => {
+        const allPlanets = {};
 
-      return response.json(allPlanets);
-    })
+        planets.forEach(planet => {
+          allPlanets[planet._id] = planet;
+        });
+
+        return response.json(allPlanets);
+      })
+    }
   },
 
   async show(request, response) {
