@@ -10,8 +10,16 @@ module.exports = {
         allPlanets[planet._id] = planet;
       });
 
-      response.json(allPlanets);
+      return response.json(allPlanets);
     })
+  },
+
+  async show(request, response) {
+    const _id = request.params.id;
+
+    const planetById = await Planet.findById({ _id });
+
+    return response.json(planetById);
   },
 
   async create(request, response) {
@@ -35,10 +43,8 @@ module.exports = {
   async delete(request, response) {
     const _id = request.params.id;
 
-    await Planet.deleteOne({ _id }, (err, result) => {
-      console.log('deleted');
-    });
+    const deleted = await Planet.deleteOne({ _id });
 
-    return response.json({ ok: 'opa' })
+    return response.json(deleted);
   }
 }
