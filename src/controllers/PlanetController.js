@@ -9,16 +9,10 @@ module.exports = {
       const planetByName = await Planet.find({ name: new RegExp(name, 'i') });
       return response.json(planetByName);
     } else {
-      await Planet.find({}, (err, planets) => {
-        const allPlanets = {};
-
-        planets.forEach(planet => {
-          allPlanets[planet._id] = planet;
-        });
-
+      await Planet.find({}, (err, allPlanets) => {
         return response.json(allPlanets);
       })
-    }
+    };
   },
 
   async show(request, response) {
