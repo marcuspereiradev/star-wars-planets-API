@@ -16,7 +16,10 @@ const PlanetSchema = new Schema({
     required: true,
   },
 
-  films: [],
+  films: {
+    type: Number,
+    required: true,
+  },
 },
   {
     timestamps: true,

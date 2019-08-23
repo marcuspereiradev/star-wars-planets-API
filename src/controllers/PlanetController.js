@@ -30,15 +30,16 @@ module.exports = {
 
     if (nameExists) return response.json(nameExists);
 
-    const films = await StarWarsAPI.fetchStarWarsAPI();
+    const films = await StarWarsAPI.fetchPlanets(name);
 
     const PlanetData = await Planet.create({
       name,
       climate,
       terrain,
+      films
     });
 
-    return response.json(PlanetData)
+    return response.json(PlanetData);
   },
 
   async delete(request, response) {
