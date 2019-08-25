@@ -27,10 +27,10 @@ module.exports = {
     const { name, climate, terrain } = request.body;
 
     const nameExists = await Planet.findOne({ name });
-
     if (nameExists) return response.json(nameExists);
 
-    const films = await StarWarsAPI.fetchPlanets(name);
+    const gotPlanet = await StarWarsAPI.fetchPlanets(name);
+    const films = Object.keys(gotPlanet.films).length;
 
     const PlanetData = await Planet.create({
       name,
