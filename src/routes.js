@@ -1,11 +1,11 @@
-const express = require('express');
-const Planet = require('./controllers/PlanetController');
+import express from 'express';
+import { index, show, create, destroy } from './controllers/PlanetController';
 
 const routes = express.Router();
 
-routes.get('/planets', Planet.index);
-routes.get('/planets/:id', Planet.show);
-routes.post('/planets', Planet.create);
-routes.delete('/planets/:id', Planet.delete);
+routes.get('/planets', index);
+routes.get('/planets/:id', show);
+routes.post('/planets', create);
+routes.delete('/planets/:id', destroy);
 
-module.exports = routes;
+export default routes;

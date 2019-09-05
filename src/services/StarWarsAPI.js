@@ -1,21 +1,20 @@
-const axios = require('axios');
+import axios from 'axios';
 
 class StarWarsAPI {
-  static async FindOnePlanet(url, name) {
-    const response = await axios.get(url);
+  static fetchPlanets = async (name, url) => {
+    url = 'https://swapi.co/api/planets/';
 
-    const foundPlanet = response.data.results.find(item => {
+    const response = await axios.get(url);
+    const { results, next } = response.data;
+
+    const foundPlanet = results.find(item => {
       return item.name === name;
     });
 
-    return (!foundPlanet) ? StarWarsAPI.FindOnePlanet(response.data.next, name) : foundPlanet;
-  }
+    const nextUrl = StarWarsAPI.fetchPlanets(name, next);
 
-  static async fetchPlanets(name) {
-    const url = 'https://swapi.co/api/planets/';
-
-    return await StarWarsAPI.FindOnePlanet(url, name);
+    return (!foundPlanet) ? nextUrl : foundPlanet;
   }
 }
 
-module.exports = StarWarsAPI;
+export default StarWarsAPI;

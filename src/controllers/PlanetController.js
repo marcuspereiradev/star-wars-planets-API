@@ -1,52 +1,55 @@
-const Planet = require('../models/Planet');
-const StarWarsAPI = require('../services/StarWarsAPI');
+import Planet from '../models/Planet';
+import StarWarsAPI from '../services/StarWarsAPI';
 
-module.exports = {
-  async index(request, response) {
-    const name = request.query.name;
+const index = async (request, response) => {
+  const name = request.query.name;
 
-    if (name) {
-      const planetByName = await Planet.find({ name: new RegExp(name, 'i') });
-      return response.json(planetByName);
-    } else {
-      await Planet.find({}, (err, allPlanets) => {
-        return response.json(allPlanets);
-      })
-    };
-  },
+  const planetByName = await Planet.find({ name: new RegExp(name, 'i') });
+  const allPlanets = await Planet.find({});
 
-  async show(request, response) {
-    const _id = request.params.id;
+  const planets = (name) ? planetByName : allPlanets;
 
-    const planetById = await Planet.findById({ _id });
+  return response.status(200).json(planets);
+};
 
-    return response.json(planetById);
-  },
+const show = async (request, response) => {
+  const _id = request.params.id;
 
-  async create(request, response) {
-    const { name, climate, terrain } = request.body;
+  const planetById = await Planet.findById({ _id });
 
-    const nameExists = await Planet.findOne({ name });
-    if (nameExists) return response.json(nameExists);
+  return response.status(200).json(planetById);
+};
 
-    const gotPlanet = await StarWarsAPI.fetchPlanets(name);
-    const films = Object.keys(gotPlanet.films).length;
+const create = async (request, response) => {
+  const { name, climate, terrain } = request.body;
 
-    const PlanetData = await Planet.create({
-      name,
-      climate,
-      terrain,
-      films
-    });
+  const nameExists = await Planet.findOne({ name });
+  if (nameExists) return response.json(nameExists);
 
-    return response.json(PlanetData);
-  },
+  const gotPlanet = await StarWarsAPI.fetchPlanets(name);
+  const films = Object.keys(gotPlanet.films).length;
 
-  async delete(request, response) {
-    const _id = request.params.id;
+  const PlanetData = await Planet.create({
+    name,
+    climate,
+    terrain,
+    films
+  });
 
-    const deleted = await Planet.deleteOne({ _id });
+  return response.status(201).json(PlanetData);
+};
 
-    return response.json(deleted);
-  }
-}
+const destroy = async (request, response) => {
+  const _id = request.params.id;
+
+  const destroyed = await Planet.deleteOne({ _id });
+
+  return response.status(204).json(destroyed);
+};
+
+export {
+  index,
+  show,
+  create,
+  destroy,
+};

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const PlanetSchema = new Schema({
   name: {
@@ -26,4 +26,4 @@ const PlanetSchema = new Schema({
   }
 );
 
-module.exports = model('Planet', PlanetSchema);
+export default model('Planet', PlanetSchema);
